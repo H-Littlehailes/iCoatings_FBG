@@ -1,0 +1,172 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jan  5 12:41:17 2024
+
+@author: Hugh Littlehailes
+"""
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jan  4 11:08:40 2024
+
+@author: Hugh Littlehailes
+"""
+
+import numpy as np
+import csv
+from glob import glob
+import matplotlib.pyplot as plt
+import math
+import time
+"""
+Created on Tue Dec 12 12:27:49 2023
+
+@author: Hugh Littlehailes
+
+Function to analyse the data from the DTG optical fibres
+"""
+
+FibreCoating = {'Stripped': {'S1' : 6.359E-6,
+                             'S2' : 7.947E-9},
+                'ORMOCER':  {'S1' : 8.418E-6,
+                             'S2' : -3.251E-9},
+                'ORMOCER-T':{'S1' : 6.910E-6,
+                             'S2' : 7.112E-9}
+                }
+Tref = 22.5
+k = 7.56E-7
+alpha_s = 0
+alpha_f = 0.5
+
+
+
+def TemperatureProbeCalc(file, fs = 100):
+    '''
+    Function calculates the temperature experienced by the temperature probe FBG from
+    file -  the data file
+    fs - the sampling frequency used for data collection
+    '''
+    TP_LINENUMBER = [] 
+    TP_LineNumber = 2                   #Identifies the column containing the line number, which can be used as a timestamp, avoiding dealing with YYYY/MM/DD hh:mm:ss formats  
+    TP_Wav2_1 = 7                       #Identifies the column containing the wavelength values from the temperature probe FBG grating 
+    TP_Tref = 22.5                      #The fibre calibration temperature used for later calculations
+    TP_S1_1 = 6.4153E-06                #The linear temperature factor 
+    TP_S1_2 = 7.7948E-09                #The quadratic temperature factor
+    TP_Lambda_ref1 = 1562.588           #The calibrated fibre wavelength
+    TP_WAVELENGTH_FBG1 = []
+    TP_T1=[]
+    with open(file, 'r') as file:
+         #Seperate the machine data from the detector data
+         for _ in range(16):
+             next(file)
+         #Separating the data into individual columns
+         for line in file:
+             columns = line.strip().split()
+             TP_LINENUMBER.append(float(columns[TP_LineNumber])*(1/fs))   #Converting the linenumber timestamp into units of seconds
+             
+             TP_Wav_1 = float(columns[TP_Wav2_1])
+             #The equation for converting the shifted wavelength in the output data into to corresponding temperature
+             TP_t1 = TP_Tref - (TP_S1_1/(2*TP_S1_2)) + np.sqrt((TP_S1_1/(2*TP_S1_2))**2+(1/TP_S1_2)*np.log(TP_Wav_1/TP_Lambda_ref1))
+             
+             TP_WAVELENGTH_FBG1.append(float(TP_Wav_1))          #The wavelength values measured by the temperature probe FBG       
+             TP_T1.append(TP_t1)                                 #The temperature values calculated from the recorded wavelength
+    return TP_LINENUMBER, TP_T1
+
+
+#TP_T1_Out = TemperatureProbeCalc("20230927 152254-ILLumiSense-Wav-CH4.txt")
+#TP_T1_Data = TP_T1_Out[1]
+#LINENUMBER = TP_T1_Out[0]
+
+# Print iterations progress
+def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    # Print New Line on Complete
+    if iteration == total: 
+        print()
+        
+#def Strain_Formula(columns, w0_data, T, T0):
+def Strain_Formula_Comp(columns, w0_data, TP, T0, S1, S2):
+    '''
+    Calculates the temperature-compensated strain experienced by the strain FBG 
+    This is the amount of mechnical strain experienced by the strain FBG by accounting for the thermal strain affect from ambient temperature, using values from a temperature sensor nearby.
+    '''
+    #return [Wavelength*(T+T0)/w0_data for i, Wavelength in enumerate(columns)]
+    return [(1/k)*(math.log(Wavelength/w0_data))-S1*(TP-T0)-S2*((TP-22.5)**2-(T0-Tref)**2)-(alpha_s-alpha_f)*(TP-T0) for i, Wavelength in enumerate(columns)]
+
+def Strain_Formula(columns, w0_data):
+    '''
+    Calculates the uncompensated strain measured by the strain FBG.
+    This does not account for the strain induced by ambient temperature.
+    epsilon = mechanical strain + thermal strain.
+    '''
+    return [(1/k)*(math.log(wavelength/w0_data)) for i, wavelength in enumerate(columns)]
+
+
+def DTG_Strain(file, F_s = 100, compensation = True, coating = 'ORMOCER'):
+    '''
+    Function to determine the strain measured within the gratings of the DTG fibres.
+    F_s is the sampling frequency of the recording in Hz, also found in line 8 of the interrogator txt file.
+    Compensation condition when true allows for the calculation of the temperature compensated strain.
+    The coating refers to the material surrounding the strain fibre which will affect the linear and quadratic factors.
+        The coating options are: stripped, ORMOCER, and ORMOCER-T, as defined in FibreCoating dictionary at the top of the page.
+        Values are provided from the data sheets from FBGS
+    '''
+    strain_value1 = 'S1'
+    strain_value2 = 'S2'
+    ANS1 = FibreCoating.get(coating)
+    ANS2 = FibreCoating.get(coating)
+    if ANS1 is not None:
+        S1 = ANS1.get(strain_value1) #This has been tested and works
+    if ANS2 is not None:
+        S2 = ANS2.get(strain_value2) #This has been tested and works
+
+    with open(file, 'r') as file:
+        lines = file.readlines()   
+
+    w0_data = [int(float(line.strip().split('\t')[1])) for line in lines[13:18]]
+
+    TP_T1_Out = TemperatureProbeCalc("20230927 152254-ILLumiSense-Wav-CH4.txt")
+    TP_T1_Data = TP_T1_Out[1]
+    LINENUMBER = TP_T1_Out[0]
+    TP = np.array(TP_T1_Data)
+    T0 = TP[0]
+ 
+    selected_data = [line.strip().split('\t')[4:9] for line in lines[20:]]
+
+    selected_data = [[float(value) for value in row] for row in selected_data]
+    
+    x_data = [int(float(line.strip().split('\t')[2])) for line in lines[20:]]
+    
+    
+    #print(x_data)
+    if compensation == True:
+        # Apply the formula to each column
+        result_columns = [Strain_Formula_Comp(column,w0_data,TP, T0, S1, S2) for column, w0_data, TP in zip(zip(*selected_data), w0_data, TP)]
+    else:
+        result_columns = [Strain_Formula(column,w0_data) for column, w0_data, in zip(zip(*selected_data), w0_data)]
+        
+    # Print the result
+    for i, result_column in enumerate(result_columns):
+        
+        fig0,(ax1) = plt.subplots(1,1,constrained_layout=True)    
+        ax1.plot(x_data, result_column, label=f"Temperature Compensated Strain Grating {1515+10*i} nm")
+        ax1.legend()
+        ax1.set(xlabel="Time (s)",ylabel="Strain ($\mu \epsilon$)")
+        
+
+DTG_Strain("20230808 123712-ILLumiSense-Wav-CH1.txt", F_s = 100, compensation = True, coating = 'ORMOCER')
