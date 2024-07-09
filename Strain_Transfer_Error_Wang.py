@@ -18,9 +18,10 @@ Ef = 7e10      #Young's modulus of the fibre
 rf = 1.25e-4   #Radius of the fibre
 Gp = 2.0e7     #Shear modulus of the fibre protective layer
 rp = 1.95e-4   #Radius of the fibre protective layer
-Ga = 1.24e8    #Shear modulus of the adhesive
+Ga = 1.240e8    #Shear modulus of the adhesive
 ha = 0.5e-4   #Thickness of adhesive layer between substrate and fibre
 #L=np.arange(1e-4,4e-3, 1e-4)
+L = 1e-2
 L1 = np.arange(1e-4,1.0001e-2, 1e-4)
 L2 = np.arange(1e-4,8.001e-3, 1e-4)
 L3 = np.arange(1e-4,5.0001e-3, 1e-4)
@@ -62,6 +63,7 @@ def integrand(x):
 B, error = quad(integrand, 0, pi)
 #print(B)
 
+beta = []
 beta_a1 =[]
 beta_a2 =[]
 beta_a3 =[]
@@ -70,29 +72,37 @@ beta_a4 =[]
 Lambda = sqrt(float(A)*float(B))
 for j in L1:
 #B = integration(C, E, D)
-    
+    LLL = Lambda*L
     LL1 = Lambda*L1
     LL2 = Lambda*L2
     LL3 = Lambda*L3
     LL4 = Lambda*L4
     #Eps_f
-    beta_a1.append(1-((np.sinh(LL1))/(LL1*np.cosh(LL1))) + (alpha_f/alpha_m)*(np.sinh(LL1)/(LL1*np.cosh(LL1))))
-    beta_a2.append(1-((np.sinh(LL2))/(LL2*np.cosh(LL2))) + (alpha_f/alpha_m)*(np.sinh(LL2)/(LL2*np.cosh(LL2))))
-    beta_a3.append(1-((np.sinh(LL3))/(LL3*np.cosh(LL3))) + (alpha_f/alpha_m)*(np.sinh(LL3)/(LL3*np.cosh(LL3))))
-    beta_a4.append(1-((np.sinh(LL4))/(LL4*np.cosh(LL4))) + (alpha_f/alpha_m)*(np.sinh(LL4)/(LL4*np.cosh(LL4))))
-
-
-print(beta_a1[0])
-L1 = L1[::-1]*100
-L2 = L2[::-1]*100
-L3 = L3[::-1]*100
-L4 = L4[::-1]*100
+    #beta_a1.append(1-((np.sinh(LL1))/(LL1*np.cosh(LL1))) + (alpha_f/alpha_m)*(np.sinh(LL1)/(LL1*np.cosh(LL1))))
+    #beta_a2.append(1-((np.sinh(LL2))/(LL2*np.cosh(LL2))) + (alpha_f/alpha_m)*(np.sinh(LL2)/(LL2*np.cosh(LL2))))
+    #beta_a3.append(1-((np.sinh(LL3))/(LL3*np.cosh(LL3))) + (alpha_f/alpha_m)*(np.sinh(LL3)/(LL3*np.cosh(LL3))))
+    #beta_a4.append(1-((np.sinh(LL4))/(LL4*np.cosh(LL4))) + (alpha_f/alpha_m)*(np.sinh(LL4)/(LL4*np.cosh(LL4))))
+    
+    beta_a1.append((1-(np.cosh(LL1)/np.cosh(Lambda*4.0001e-2)))+(alpha_f/alpha_m)*(np.cosh(LL1)/np.cosh(Lambda*4.0001e-2)))
+    beta_a2.append((1-(np.cosh(LL2)/np.cosh(Lambda*2.5001e-2)))+(alpha_f/alpha_m)*(np.cosh(LL2)/np.cosh(Lambda*2.5001e-2)))
+    beta_a3.append((1-(np.cosh(LL3)/np.cosh(Lambda*2.001e-2)))+(alpha_f/alpha_m)*(np.cosh(LL3)/np.cosh(Lambda*2.001e-2)))
+    beta_a4.append((1-(np.cosh(LL4)/np.cosh(Lambda*1.0001e-2)))+(alpha_f/alpha_m)*(np.cosh(LL4)/np.cosh(Lambda*1.0001e-2)))
+    beta.append(1-((np.sinh(LLL))/(LLL*np.cosh(LLL))) + (alpha_f/alpha_m)*(np.sinh(LLL)/(LLL*np.cosh(LLL))))
+print(beta)
+#L1 = L1[::-1]*100
+#L2 = L2[::-1]*100
+#L3 = L3[::-1]*100
+#L4 = L4[::-1]*100
+L1 = L1*100
+L2 = L2*100
+L3 = L3*100
+L4 = L4*100
 #print(len(L1))
 fig, ax = plt.subplots( constrained_layout = True)
-ax.scatter(L1, beta_a1[0], label = '4 cm')
-ax.scatter(L2, beta_a2[0], label = '2.5 cm')
-ax.scatter(L3, beta_a3[0], label = '2 cm')
-ax.scatter(L4, beta_a4[0], label = '1 cm')
+ax.scatter(L1, beta_a1[0], label = '1 cm')
+ax.scatter(L2, beta_a2[0], label = '0.8 cm')
+ax.scatter(L3, beta_a3[0], label = '0.5 cm')
+ax.scatter(L4, beta_a4[0], label = '0.2 cm')
 ax.legend()
 ax.set(xlabel = "Half the bonding length L(cm)")#, ylabel = r'Strain transfer coefficient [$\Beta$]')
 plt.ylabel(r'Strain transfer coefficient $\beta$') 
