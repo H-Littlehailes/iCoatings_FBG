@@ -38,13 +38,13 @@ def TemperatureProbeCalc(file):
         
     return time, T 
 
-
+beta = 0.7704326683329309 #0.55577141  #Strain transfer coefficient
 def Strain_Formula_Comp(w0_data, w0, TP, T0, S1, S2):
     '''
     Calculates the temperature-compensated strain experienced by the strain FBG 
     This is the amount of mechnical strain experienced by the strain FBG by accounting for the thermal strain affect from ambient temperature, using values from a temperature sensor nearby.
     '''  
-    return ((1/k)*(np.log(np.array(w0_data)/w0)-S1*(TP-T0)-S2*((TP-Tref)**2-(T0-Tref)**2))-(alpha_s-alpha_f)*(TP-T0))*(1/0.55577141)
+    return ((1/k)*(np.log(np.array(w0_data)/w0)-S1*(TP-T0)-S2*((TP-Tref)**2-(T0-Tref)**2))-(alpha_s-alpha_f)*(TP-T0))*(1/beta)
     
 
 def DTG_Strain(file, compensation = True, coating = 'ORMOCER'):
