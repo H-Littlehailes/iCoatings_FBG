@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Aim of file is to determine the temperature compensated strain after the 
+Aim of file is to determine the mechanical strain after the effect of thermal strain has been removed, by temperature compensation.
 
 @author: Hugh Littlehailes
 """
