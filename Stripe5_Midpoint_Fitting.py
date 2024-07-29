@@ -3,6 +3,8 @@
 Created on Wed Jun 12 12:25:45 2024
 
 @author: Hugh Littlehailes
+
+Quick code to find the mean values of a noisy signal. Replaced by medFilt.
 """
 
 import numpy as np
