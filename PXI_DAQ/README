@@ -1,1 +1,4 @@
-
+Repository contains the LabVIEW VI generated to simulateously record temperature data, from N-type thermocouples, 
+and strain values, from fibre Bragg grating optical fibres conencted to an interrogator, and save them to a .tdms file.
+The DAQ used is a national instruments PXI series machine. The interrogator was an FBGS 904 4-channel interrogator with
+data streaming by TCP connection.
