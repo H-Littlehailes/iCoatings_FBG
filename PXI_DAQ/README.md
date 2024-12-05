@@ -21,15 +21,15 @@ The PXI-DAQ system used is a national instruments PXI series machine, a speciali
 
 This script is set to record up to 6 temperature channels into a TDMS channel. The DAQ block controls the sampling rate of the sensors which is currently set to 1 kHz. This has been confirmed by checking the timestamps generated in the TDMS file.
 
-![program](pics/program_screengrab_1.png)
+![program](images/program_screengrab_1.png)
 
 When the program is started, the user is prompted to define the file path for the TDMS recording. The recording is then started, and two channels are graphically displayed for debugging purposes.
 
-![display](pics/program_screengrab_2.png)
+![display](images/program_screengrab_2.png)
 
 When the user clicks the stop button, the contents of the TDMS file are displayed.
 
-![file contents](pics/program_screengrab_3.png)
+![file contents](images/program_screengrab_3.png)
 
 ## [Data Receiver_mod.vi](Data%20Receiver.vi)
 
@@ -64,10 +64,10 @@ A program that combines the contents of [Data Receiver_mod.vi](Data%20Receiver.v
 
 The following schematic shows the program with red rectangles to show the major modules.
 
-![combined program](pics/overall_program_screenshot_1.png)
+![combined program](images/overall_program_screenshot_1.png)
 
 The following image is a flowchart summarising the overall program. Data is only written if the TCP connection to the fibre Bragg is successfully opened. If the TCP connection fails to open, the program skips to the end where it displays an empty TDMS file. At present, the program does not check if any thermocouples are connected. If it does connect, data from the TCP connection and thermocouples are written to different, hard-coded groups in the TDMS files. The thermocouple data is written to the Thermocouple group whilst the strain data is written to the Strain group. They cannot be written to the same group due to inconsistencies in the timing for the strain sensors.
 
-![flowchart](pics/PXI_DAQ_TCP_Flow.png)
+![flowchart](images/PXI_DAQ_TCP_Flow.png)
 
 
