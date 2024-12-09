@@ -1,6 +1,6 @@
-#Acoustic emission analysis files
+# Acoustic emission analysis files
 
-##Contents
+## Contents
 - [Data Receiver.vi](Data%20Receiver.vi): 
 - [Bandpass_Filter_Outline_Overlay.py](Bandpass_Filter_Outline_Overlay.py):
 - [ML_PNG_Segmentation_20240226.py](ML_PNG_Segmentation_20240226.py): Short-cut ML method for acoustic emission diagnostic from png images of STFT data.
@@ -15,3 +15,5 @@
 - [parse_ae_2_Variation.py](parse_ae_2_Variation.py):
 - [parse_ae_2_Variation2.py](parse_ae_2_Variation.py): Master version of acoustic-emission data algorithms.
 - [parse_ae_2_Variation_Autosave_20230620.py](parse_ae_2_Variation_Autosave_20230620.py):
+
+## Description
