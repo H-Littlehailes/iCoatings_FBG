@@ -19,8 +19,8 @@ Below is a brief description of the function of each file:
 - [DTG_Fibre_Analysis](DTG_Fibre_Analysis):
 - [New_Temp_Strain_Compensation.py](New_Temp_Strain_Compensation.py): File calculates the temperature-compensated strain measurement from combination of strain and temperature probe co-measuring in the experiment. File reads in data from the temperature probe and calculates the temperature measured in the experiment, this value is then fed in to the calculation of the strain measured by the strain gauge accounting for the thermally induced strain, to isolate the values of the mechanical strain. Output is a 3x1 plot (i) comparing the temperature-compensated and uncompensated strain, (ii) the temperature measured during the experiment (iii) the difference between strain values in (i) to determine functioning of the calculation - (iii) should match form of (ii)
 - [Peak_finder_Stripe5.py](Peak_finder_Stripe5.py):
-- [Plate1_Temp_Comp.py](Plate1_Temp_Comp.py):
-- [Plate2_Temp_Comp.py](Plate2_Temp_Comp.py):
+- [Plate1_Temp_Comp.py](Plate1_Temp_Comp.py): Calculates the temperature-compensated strain values measured by the FBGs on the first experimental substrate, accounting for the strain-transfer error calculated in [Strain_Transfer_Error_Wang.py](Strain_Transfer_Error_Wang.py).
+- [Plate2_Temp_Comp.py](Plate2_Temp_Comp.py): Calculates the temperature-compensated strain values measured by the FBGs on the first experimental substrate, accounting for the strain-transfer error calculated in [Strain_Transfer_Error_Wang.py](Strain_Transfer_Error_Wang.py).
 - [StrainProbeAnalysis.py](StrainProbeAnalysis.py):
 - [Strain_Comp_From_TextFile_data.py](Strain_Comp_From_TextFile_data.py):
 - [Strain_Comp_From_TextFile_data2.py](Strain_Comp_From_TextFile_data2.py):
