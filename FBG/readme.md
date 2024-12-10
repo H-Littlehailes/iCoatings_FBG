@@ -25,8 +25,8 @@ Below is a brief description of the function of each file:
 - [Strain_Comp_From_TextFile_data.py](Strain_Comp_From_TextFile_data.py):
 - [Strain_Comp_From_TextFile_data2.py](Strain_Comp_From_TextFile_data2.py):
 - [Strain_Temp_Plotter.py](Strain_Temp_Plotter.py):
-- [Strain_Transfer_Error_Wang.py](Strain_Transfer_Error_Wang.py):
-- [Strain_Transfer_Error_Wang_2016.py](Strain_Transfer_Error_Wang_2016.py):
+- [Strain_Transfer_Error_Wang.py](Strain_Transfer_Error_Wang.py): A script for determining the strain transfer error between the heated substrate and fibre-Bragg grating, accounting for strain losses from material deformation. Employs a mathematical model for system developed by Wang H. & J.-G. Dai Composites Part B 162 (2019) 303–313 
+- [Strain_Transfer_Error_Wang_2016.py](Strain_Transfer_Error_Wang_2016.py): Beginnings of an alternative model to the above strain transfer error. This model did not account for thermally induced strain, that we were interested in.
 - [Stripe5_Midpoint_Fitting.py](Stripe5_Midpoint_Fitting.py):
 - [TemperatureChainAnalysis.py](TemperatureChainAnalysis.py): File reads in the data from the temperature chain. The temperature chain fibres contain 3 gratings at different wavelengths, with 3 data streams, and are indexed as '%data_channel_#% - %grating_Number_Low_to_High%'. This script will calculate the temperature variation experienced by each grating and generate a plot.
 - [TemperatureComparison_20230905.py](TemperatureComparison_20230905.py): File reads in data from a temperature chain fibre and a temperature probe, for a total of 4 data streams. This script is used to compare the congruency in temperature measurement between fibres. It should be expected that the temperature probe will be more sensitive to temperature variation due to a thinner metal jacket, and the temperature chain has been seen to measure a higher temperature than the temperature probe in the same conditions.
