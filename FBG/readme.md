@@ -12,7 +12,28 @@ The python scripts in this folder are intended to import the relevant data files
 
 Below is a brief description of the function of each file:
 
-## Contents
+## Contents 
+- [DTG_Data_Correction_20240326.py](DTG_Data_Correction_20240326.py):
+- [DTG_Data_Correction_draft2_20240327.py](DTG_Data_Correction_draft2_20240327.py):
+- [DTG_Data_Sorting_Script_20240417.py](DTG_Data_Sorting_Script_20240417.py):
+- [DTG_Fibre_Analysis](DTG_Fibre_Analysis):
+- [New_Temp_Strain_Compensation.py](New_Temp_Strain_Compensation.py):
+- [Peak_finder_Stripe5.py](Peak_finder_Stripe5.py):
+- [Plate1_Temp_Comp.py](Plate1_Temp_Comp.py):
+- [Plate2_Temp_Comp.py](Plate2_Temp_Comp.py):
+- [StrainProbeAnalysis.py](StrainProbeAnalysis.py):
+- [Strain_Comp_From_TextFile_data.py](Strain_Comp_From_TextFile_data.py):
+- [Strain_Comp_From_TextFile_data2.py](Strain_Comp_From_TextFile_data2.py):
+- [Strain_Temp_Plotter.py](Strain_Temp_Plotter.py):
+- [Strain_Transfer_Error_Wang.py](Strain_Transfer_Error_Wang.py):
+- [Strain_Transfer_Error_Wang_2016.py](Strain_Transfer_Error_Wang_2016.py):
+- [Stripe5_Midpoint_Fitting.py](Stripe5_Midpoint_Fitting.py):
+- [TemperatureChainAnalysis.py](TemperatureChainAnalysis.py):
+- [TemperatureComparison_20230905.py](TemperatureComparison_20230905.py):
+- [TemperatureProbeAnalysis.py](TemperatureProbeAnalysis.py):
+- [Temperature_Compensated_Strain_20240109.py](Temperature_Compensated_Strain_20240109.py):
+
+
 StrainProbeAnalysis.py  -  File reads in the data from the strain gauge and calculates the strain values directly. The strain gauges are single grating with only one data stream. This file uses single input and does not account for thermally induced strain.
 
 TemperatureChainAnalysis.py  -  File reads in the data from the temperature chain. The temperature chain fibres contain 3 gratings at different wavelengths, with 3 data streams, and are indexed as '%data_channel_#% - %grating_Number_Low_to_High%'. This script will calculate the temperature variation experienced by each grating and generate a plot.
